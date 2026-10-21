@@ -1,0 +1,34 @@
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+
+        # dfs problem, since we want to find out many islands that there are
+        # an island can be like a bunch of 1s as long as they're connected
+        # and adjacent lands horizontally and are vertical
+        
+        rows, cols = len(grid), len(grid[0])
+
+        directions = [ [-1, 0], [1, 0], [0, 1], [0, -1]]
+
+        islands = 0
+
+        def dfs(r, c):
+            # out of bounds or water/already visited -> stop
+            if r < 0 or c < 0 or r >= rows or c >= cols or grid[r][c] == "0":
+                return
+
+            grid[r][c] = "0" # sink this cell so it’s never revisited
+
+            # check up, down, left, right for directions
+            for dr, dc in directions:
+                dfs(r + dr, c + dc)
+
+        # iterate through each cell once
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == "1":
+                    dfs(r, c)
+                    islands += 1 # increment because the outer loop found an unvisited "1" / a new island
+            
+        return islands
+
+        
